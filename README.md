@@ -81,3 +81,13 @@ gcloud run deploy --image=europe-west9-docker.pkg.dev/pokedevops/student-james/p
 ```bash
 act --secret-file .secrets
 ```
+
+# Debugging
+
+## Act — Github Actions Locally
+
+Not working because:
+
+```
+Error: Error response from daemon: failed to resolve reference "docker.io/catthehacker/ubuntu:act-latest": failed to authorize: failed to fetch oauth token: unexpected status from GET request to https://auth.docker.io/token?scope=repository%3Acatthehacker%2Fubuntu%3Apull&service=registry.docker.io: 401 Unauthorized
+```
