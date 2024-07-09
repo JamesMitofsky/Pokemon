@@ -20,6 +20,7 @@ RUN npm run build
 
 # Final stage: Setup the production environment
 FROM base AS runner
+WORKDIR /app
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -32,14 +33,14 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Set permissions for prerender cache
-RUN mkdir .next && chown nextjs:nodejs .next
+RUN chown nextjs:nodejs .next
 
 # Use the non-root user
 USER nextjs
 
-# Expose port 3000 and set necessary environment variables
-EXPOSE 3000
-ENV PORT 3000
+# Expose port 8080 because it's what the gcloud is expecting
+EXPOSE 8080
+ENV PORT 8080
 ENV HOSTNAME "0.0.0.0"
 
 # server.js is created by next build from the standalone output
