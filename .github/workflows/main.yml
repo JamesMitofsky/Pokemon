@@ -1,0 +1,32 @@
+name: Deploy to Google Cloud
+on: push
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checks out your repository under $GITHUB_WORKSPACE, so your workflow can access it
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log
+        run: echo "finished checkout"
+
+      # Step 2: Sets up Docker Buildx for building and pushing Docker images with multi-platform support
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log
+        run: echo "finished docker buildx"
+
+      # Step 3: Logs into Google Cloud with the provided credentials, allowing subsequent steps to interact with GCP services
+      - name: Login to Google Cloud
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: "latest" # Use the latest version of gcloud CLI
+          project_id: pokedevops # Google Cloud project ID
+          service_account_key: ${{ secrets.GCP_SA_KEY }} # Service account key for authentication
+          export_default_credentials: true # Makes the credentials available to other actions
+
+      - name: Log
+        run: echo "finished google auth"
