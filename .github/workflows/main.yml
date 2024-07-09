@@ -5,15 +5,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checks out your repository under $GITHUB_WORKSPACE, so your workflow can access it
+      # Check out your repository under $GITHUB_WORKSPACE, so your workflow can access it
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Sets up Docker Buildx for building and pushing Docker images with multi-platform support
+      # Set up Docker Buildx for building and pushing Docker images with multi-platform support
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Step 3: Logs into Google Cloud with the provided credentials, allowing subsequent steps to interact with GCP services
+      # Log into Google Cloud with the provided credentials, allowing subsequent steps to interact with GCP services
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v2
         with:
@@ -22,9 +22,5 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Use gcloud CLI
-        run: gcloud info
-
-      # Step 5: Executes the deploy.sh script
       - name: Execute deploy script
         run: ./deploy.sh
