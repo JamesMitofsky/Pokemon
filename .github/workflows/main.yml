@@ -24,3 +24,11 @@ jobs:
 
       - name: Use gcloud CLI
         run: gcloud info
+
+      # Step 4: Make deploy.sh executable
+      # - name: Make deploy script executable
+      #   run: chmod +x ./deploy.sh
+
+      # Step 5: Executes the deploy.sh script
+      - name: Execute deploy script
+        run: ./deploy.sh
