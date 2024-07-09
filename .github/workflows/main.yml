@@ -5,7 +5,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # Check out your repository under $GITHUB_WORKSPACE, so your workflow can access it
+      # Check out repository under $GITHUB_WORKSPACE, so the workflow can access it
       - name: Checkout code
         uses: actions/checkout@v4
 
