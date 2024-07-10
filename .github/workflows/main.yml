@@ -25,9 +25,14 @@ jobs:
         run: docker buildx build -t ${{ env.IMAGE }}:${{ env.COMMIT_ID }} --push .
 
       - name: Deploy to Google Cloud
+        id: deploy
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: service-student-james-${{ env.DEPLOYMENT_ENV }}
           image: ${{ env.IMAGE }}:${{ env.COMMIT_ID }}
           region: europe-west9
           project_id: pokedevops
+
+      # One day, publish this directly to the PR so it can be easily visited.
+      - name: "Use output"
+        run: 'curl "${{ steps.deploy.outputs.url }}"'
