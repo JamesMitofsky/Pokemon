@@ -21,6 +21,9 @@ jobs:
         with:
           credentials_json: "${{ secrets.GCP_SA_KEY }}"
 
+      - name: Configure Docker
+        run: gcloud auth configure-docker europe-west9-docker.pkg.dev
+
       - name: Pull the latest image
         run: docker pull ${{ env.BASE_IMAGE }}:${{ env.COMMIT_ID }}
 
