@@ -5,18 +5,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # Check out repository under $GITHUB_WORKSPACE, so the workflow can access it
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Log into Google Cloud with the provided credentials, allowing subsequent steps to interact with GCP services
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v2
         with:
           credentials_json: "${{ secrets.GCP_SA_KEY }}"
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Execute deploy script
-        run: ./deploy.sh
+      - name: Build and Deploy to Google Cloud
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: service-student-james-dev
+          image: europe-west9-docker.pkg.dev/pokedevops/student-james/pokemon
+          region: europe-west9
+          project_id: pokedevops
