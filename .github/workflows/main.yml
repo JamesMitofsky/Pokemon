@@ -20,11 +20,9 @@ jobs:
         with:
           credentials_json: "${{ secrets.GCP_SA_KEY }}"
 
-      - name: Build Docker image
-        uses: docker/build-push-action@v2
-        with:
-          push: false
-          tags: ${{ env.COMMIT_ID }}
+      - name: Build and push Docker image
+        run: |
+          docker build -t europe-west9-docker.pkg.dev/pokedevops/student-james/pokemon:${{ env.COMMIT_ID }} --push .
 
       - name: Deploy to Google Cloud
         uses: google-github-actions/deploy-cloudrun@v2
