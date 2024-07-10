@@ -1,3 +1,5 @@
+![workflow testing](https://github.com/jamesmitofsky/Pokemon/actions/workflows/main.yml/badge.svg)
+
 # Local setup
 
 First, run the development server:
