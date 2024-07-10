@@ -1,5 +1,9 @@
 name: Deploy to Google Cloud
+# ONLY ON MAIN
 on: push
+
+env:
+  COMMIT_ID: ${{ github.sha }}
 
 jobs:
   deploy:
@@ -17,6 +21,6 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: service-student-james-dev
-          image: europe-west9-docker.pkg.dev/pokedevops/student-james/pokemon
+          image: europe-west9-docker.pkg.dev/pokedevops/student-james/pokemon:${COMMIT_ID}
           region: europe-west9
           project_id: pokedevops
