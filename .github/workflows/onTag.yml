@@ -22,18 +22,18 @@ jobs:
           credentials_json: "${{ secrets.GCP_SA_KEY }}"
 
       - name: Pull the latest image
-        run: docker pull ${BASE_IMAGE}:${COMMIT_ID}
+        run: docker pull ${{ env.BASE_IMAGE }}:${{ env.COMMIT_ID }}
 
       - name: Tag the Docker image
-        run: docker tag ${BASE_IMAGE}:${COMMIT_ID} ${BASE_IMAGE}:${TAG_ID}
+        run: docker tag ${{ env.BASE_IMAGE }}:${{ env.COMMIT_ID }} ${{ env.BASE_IMAGE }}:${{ env.TAG_ID }}
 
       - name: Push the tagged image
-        run: docker push ${BASE_IMAGE}:${TAG_ID}
+        run: docker push ${{ env.BASE_IMAGE }}:${{ env.TAG_ID }}
 
       - name: Deploy to Google Cloud
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: service-student-james-preprod
-          image: ${BASE_IMAGE}:${TAG_ID}
+          image: ${{ env.BASE_IMAGE }}:${{ env.TAG_ID }}
           region: europe-west9
           project_id: pokedevops

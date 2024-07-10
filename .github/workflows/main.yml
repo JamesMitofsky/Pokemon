@@ -21,6 +21,6 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: service-student-james-dev
-          image: europe-west9-docker.pkg.dev/pokedevops/student-james/pokemon:${COMMIT_ID}
+          image: europe-west9-docker.pkg.dev/pokedevops/student-james/pokemon:${{ env.COMMIT_ID }}
           region: europe-west9
           project_id: pokedevops
