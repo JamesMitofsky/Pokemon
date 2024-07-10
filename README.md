@@ -1,3 +1,5 @@
+![workflow testing](https://github.com/jamesmitofsky/Pokemon/actions/workflows/main.yml/badge.svg)
+
 # Local setup
 
 First, run the development server:
@@ -12,8 +14,10 @@ npm run dev
 
 Layout of the URL
 
-```
+```bash
 europe-west9-docker.pkg.dev/[project-id]/[registry-id]/[image-name]
+# [project-id]  /  [registry-id]  /  [image-name]
+# pokedevops    /  student-james  /  pokemon
 ```
 
 Check artifacts
@@ -68,4 +72,24 @@ docker push europe-west9-docker.pkg.dev/pokedevops/student-james/pokemon
 gcloud run deploy --image=europe-west9-docker.pkg.dev/pokedevops/student-james/pokemon service-student-james-dev --project=pokedevops
 
 # Then select `24` for the European server.
+```
+
+# Automation of Github Actions
+
+- Use [act](https://nektosact.com/introduction.html)
+
+## Run push command
+
+```bash
+act --secret-file .secrets
+```
+
+# Debugging
+
+## Act — Github Actions Locally
+
+Not working because:
+
+```
+Error: Error response from daemon: failed to resolve reference "docker.io/catthehacker/ubuntu:act-latest": failed to authorize: failed to fetch oauth token: unexpected status from GET request to https://auth.docker.io/token?scope=repository%3Acatthehacker%2Fubuntu%3Apull&service=registry.docker.io: 401 Unauthorized
 ```

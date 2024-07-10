@@ -1,0 +1,30 @@
+name: Manually trigger
+on:
+  workflow_dispatch:
+
+env:
+  COMMIT_ID: ${{ github.sha }}
+  ENVIRONEMNT: prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker europe-west9-docker.pkg.dev
+
+      - name: Build and Deploy to Google Cloud
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: service-student-james-${{ env.ENVIRONEMNT }}
+          image: europe-west9-docker.pkg.dev/pokedevops/student-james/pokemon:${COMMIT_ID}
+          region: europe-west9
+          project_id: pokedevops

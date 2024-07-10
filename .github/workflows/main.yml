@@ -1,0 +1,38 @@
+name: Deploy to Google Cloud
+on: push
+
+env:
+  COMMIT_ID: ${{ github.sha }}
+  DEPLOYMENT_ENV: dev
+  IMAGE: europe-west9-docker.pkg.dev/pokedevops/student-james/pokemon
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker europe-west9-docker.pkg.dev
+
+      - name: Build and push Docker image
+        run: docker buildx build -t ${{ env.IMAGE }}:${{ env.COMMIT_ID }} --push .
+
+      - name: Deploy to Google Cloud
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: service-student-james-${{ env.DEPLOYMENT_ENV }}
+          image: ${{ env.IMAGE }}:${{ env.COMMIT_ID }}
+          region: europe-west9
+          project_id: pokedevops
+
+      # One day, publish this directly to the PR so it can be easily visited.
+      - name: "Use output"
+        run: 'curl "${{ steps.deploy.outputs.url }}"'

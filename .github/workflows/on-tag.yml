@@ -1,0 +1,44 @@
+name: On Tag Git
+on:
+  push:
+    tags:
+      - "*"
+
+env:
+  COMMIT_ID: ${{ github.sha }}
+  TAG_ID: ${{ github.ref_name }}
+  DEPLOYMENT_ENV: preprod
+  BASE_IMAGE: europe-west9-docker.pkg.dev/pokedevops/student-james/pokemon
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker europe-west9-docker.pkg.dev
+
+      - name: Pull the latest image
+        run: docker pull ${{ env.BASE_IMAGE }}:${{ env.COMMIT_ID }}
+
+      - name: Tag the Docker image
+        run: docker tag ${{ env.BASE_IMAGE }}:${{ env.COMMIT_ID }} ${{ env.BASE_IMAGE }}:${{ env.TAG_ID }}
+
+      - name: Push the tagged image
+        run: docker push ${{ env.BASE_IMAGE }}:${{ env.TAG_ID }}
+
+      - name: Deploy to Google Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: service-student-james-${{ env.DEPLOYMENT_ENV }}
+          image: ${{ env.BASE_IMAGE }}:${{ env.TAG_ID }}
+          region: europe-west9
+
+          project_id: pokedevops
