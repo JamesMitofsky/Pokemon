@@ -18,9 +18,11 @@ jobs:
         with:
           credentials_json: "${{ secrets.GCP_SA_KEY }}"
 
+      - name: Configure Docker
+        run: gcloud auth configure-docker europe-west9-docker.pkg.dev
+
       - name: Build and push Docker image
-        run: |
-          docker build -t ${{ env.IMAGE }}:${{ env.COMMIT_ID }} --push .
+        run: docker buildx build -t ${{ env.IMAGE }}:${{ env.COMMIT_ID }} --push .
 
       - name: Deploy to Google Cloud
         uses: google-github-actions/deploy-cloudrun@v2
