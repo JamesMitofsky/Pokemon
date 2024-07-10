@@ -40,4 +40,5 @@ jobs:
           service: service-student-james-${{ env.DEPLOYMENT_ENV }}
           image: ${{ env.BASE_IMAGE }}:${{ env.TAG_ID }}
           region: europe-west9
+
           project_id: pokedevops
