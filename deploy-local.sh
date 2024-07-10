@@ -2,7 +2,7 @@
 
 # REQUIREMENTS
 # 1. Make the file executable by running this in the terminal: chmod +x deploy.sh
-# 2. Then run the script by typing: ./deploy.sh
+# 2. Then run the script by typing: ./deploy-local.sh
 
 # Ensure Docker is using buildx as the builder
 docker buildx use default
